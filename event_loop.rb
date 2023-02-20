@@ -28,7 +28,7 @@ class Worker
   end
 end
 
-def run_with_reactor
+def run_with_event_loop
   workers = []
   workers << Worker.new('#1')
   workers << Worker.new('#2')
@@ -40,4 +40,4 @@ def run_with_reactor
   end
 end
 
-measure_duration { run_with_reactor }
+measure_duration { run_with_event_loop }
