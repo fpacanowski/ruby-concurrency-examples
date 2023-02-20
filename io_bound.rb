@@ -1,4 +1,5 @@
 require 'socket'
+require './helpers'
 
 def fetch_random
   sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
@@ -28,12 +29,6 @@ def run_with_processes
     fork { fetch_random }
   end
   Process.waitall
-end
-
-def measure_duration
-  start = Time.now
-  yield
-  puts "Duration: #{Time.now - start}"
 end
 
 measure_duration { run_sequential }

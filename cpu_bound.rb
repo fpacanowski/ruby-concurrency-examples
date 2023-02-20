@@ -1,4 +1,5 @@
 require 'digest'
+require './helpers'
 
 def compute(input)
   result = input.to_s
@@ -27,12 +28,6 @@ def run_with_processes
     fork { slice.map { |x| compute(x) } }
   end
   Process.waitall
-end
-
-def measure_duration
-  start = Time.now
-  yield
-  puts "Duration: #{Time.now - start}"
 end
 
 measure_duration { run_sequential }
