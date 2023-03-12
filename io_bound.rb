@@ -11,12 +11,12 @@ def fetch_random
 end
 
 def run_sequential
-  puts 'Running sequential'
+  puts "\n Running sequential"
   3.times { fetch_random }
 end
 
 def run_with_threads
-  puts 'Running with threads'
+  puts "\n Running with threads"
   threads = []
   3.times do
     threads << Thread.new { fetch_random }
@@ -25,7 +25,7 @@ def run_with_threads
 end
 
 def run_with_processes
-  puts 'Running with processes'
+  puts "\n Running with processes"
   3.times do
     fork { fetch_random }
   end
@@ -33,10 +33,7 @@ def run_with_processes
 end
 
 measure_duration { run_sequential }
-puts
 
 measure_duration { run_with_threads }
-puts
 
 measure_duration { run_with_processes }
-puts

@@ -10,12 +10,12 @@ def compute(input)
 end
 
 def run_sequential
-  puts 'Running sequential'
+  puts "\n Running sequential"
   (1..100).map { |x| compute(x) }
 end
 
 def run_with_threads
-  puts 'Running with threads'
+  puts "\n Running with threads"
   threads = []
   (1..100).each_slice(25) do |slice|
     threads << Thread.new { slice.map { |x| compute(x) } }
@@ -24,7 +24,7 @@ def run_with_threads
 end
 
 def run_with_processes
-  puts 'Running with processes'
+  puts "\n Running with processes"
   (1..100).each_slice(25) do |slice|
     fork { slice.map { |x| compute(x) } }
   end
@@ -32,7 +32,7 @@ def run_with_processes
 end
 
 def run_with_ractors_wrong
-  puts 'Running with ractor'
+  puts "\n Running with ractor"
   ractors = []
   (1..100).each_slice(25) do |slice|
     slice.dup.then do |tmp|
@@ -75,7 +75,7 @@ end
 # exit
 
 def run_with_ractors
-  puts 'Running with ractor'
+  puts "\n Running with ractor"
   ractors = [ractor, ractor, ractor, ractor]
   (1..100).each_slice(25).with_index do |slice, i|
     copy = slice.map(&:to_s).dup
@@ -88,13 +88,9 @@ end
 # ERROR: can not access non-shareable objects in constant Kernel::RUBYGEMS_ACTIVATION_MONITOR by non-main ractor. (Ractor::IsolationError)
 
 measure_duration { p run_sequential }
-puts
 
 measure_duration { p run_with_threads }
-puts
 
 measure_duration { p run_with_processes }
-puts
 
 # measure_duration { p run_with_ractors }
-puts

@@ -1,25 +1,24 @@
 require 'digest'
 require './helpers'
 require 'debug'
-require 'securerandom'
 
 def compute()
   (25 * 50_000).times do
-    var = SecureRandom.base64(10)
-    result = Digest::SHA1.hexdigest(var)
+    var = Random.rand(1000)
+    result = Digest::SHA1.hexdigest(var.to_s)
   end
   puts 'done'
 end
 
-MULTIPLY_TASK_NUMBER = 12
+MULTIPLY_TASK_NUMBER = 4
 
 def run_sequential
-  puts 'Running sequential'
+  puts "\n Running sequential"
   MULTIPLY_TASK_NUMBER.times { |x| compute }
 end
 
 def run_with_threads
-  puts 'Running with threads'
+  puts "\n Running with threads"
   threads = []
   MULTIPLY_TASK_NUMBER.times do
     threads << Thread.new { compute }
@@ -28,7 +27,7 @@ def run_with_threads
 end
 
 def run_with_processes
-  puts 'Running with processes'
+  puts "\n Running with processes"
   MULTIPLY_TASK_NUMBER.times do
     fork { compute }
   end
@@ -36,7 +35,7 @@ def run_with_processes
 end
 
 def run_with_ractors
-  puts 'Running with ractor'
+  puts "\n Running with ractor"
   MULTIPLY_TASK_NUMBER.times.map do
     Ractor.new { compute }
   end.each(&:take)
@@ -74,7 +73,7 @@ end
 # exit
 
 # def run_with_ractors
-#   puts 'Running with ractor'
+#   puts "\n Running with ractor"
 #   ractors = [ractor, ractor, ractor, ractor]
 #   (1..100).each_slice(25).with_index do |slice, i|
 #     copy = slice.map(&:to_s).dup
@@ -86,14 +85,12 @@ end
 # end
 # ERROR: can not access non-shareable objects in constant Kernel::RUBYGEMS_ACTIVATION_MONITOR by non-main ractor. (Ractor::IsolationError)
 
+# compute
+
 measure_duration { p run_sequential }
-puts
 
 measure_duration { p run_with_threads }
-puts
 
 measure_duration { p run_with_processes }
-puts
 
 measure_duration { p run_with_ractors }
-puts
