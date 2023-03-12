@@ -2,7 +2,7 @@ require 'socket'
 require './helpers'
 
 def fetch_random
-  sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
+  sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, protocol = 0)
   # sock.connect(Socket.sockaddr_in(9000, '127.0.0.1')) # eq to next line
   sock.connect Socket.pack_sockaddr_in(9000, '127.0.0.1')
   data = sock.recv(10)
