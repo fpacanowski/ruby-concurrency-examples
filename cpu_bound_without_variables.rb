@@ -1,24 +1,20 @@
 require 'digest'
-require './helpers'
-require 'debug'
 
 def compute()
   (25 * 50_000).times do
     var = Random.rand(1000)
     result = Digest::SHA1.hexdigest(var.to_s)
   end
-  puts 'done'
+  print '.'
 end
 
 MULTIPLY_TASK_NUMBER = 4
 
 def run_sequential
-  puts "\n Running sequential"
   MULTIPLY_TASK_NUMBER.times { |x| compute }
 end
 
 def run_with_threads
-  puts "\n Running with threads"
   threads = []
   MULTIPLY_TASK_NUMBER.times do
     threads << Thread.new { compute }
@@ -27,7 +23,6 @@ def run_with_threads
 end
 
 def run_with_processes
-  puts "\n Running with processes"
   MULTIPLY_TASK_NUMBER.times do
     fork { compute }
   end
@@ -35,7 +30,6 @@ def run_with_processes
 end
 
 def run_with_ractors
-  puts "\n Running with ractor"
   MULTIPLY_TASK_NUMBER.times.map do
     Ractor.new { compute }
   end.each(&:take)
@@ -85,12 +79,11 @@ end
 # end
 # ERROR: can not access non-shareable objects in constant Kernel::RUBYGEMS_ACTIVATION_MONITOR by non-main ractor. (Ractor::IsolationError)
 
-# compute
+require './helpers'
 
-measure_duration { p run_sequential }
-
-measure_duration { p run_with_threads }
-
-measure_duration { p run_with_processes }
-
-measure_duration { p run_with_ractors }
+Benchmark.benchmark('', nil, FORMAT_WITH_SUBPROCESSES) do |x|
+  x.report("Sequential \n") { run_sequential }
+  x.report("Threads \n")  { run_with_threads }
+  x.report("Processes \n")  { run_with_processes }
+  x.report("Ractors \n")  { run_with_ractors }
+end
