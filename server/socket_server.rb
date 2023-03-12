@@ -18,6 +18,7 @@ workers = COUNT.times.map do
       session = queue.take
       value = (0..9).to_a.sample
       sleep 2
+      puts 'received request'
       session.print value
       session.close
     end

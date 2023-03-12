@@ -19,8 +19,8 @@ end
 
 def run_with_fibers
   workers = [] <<
-    worker('#1')
-    worker('#2')
+    worker('#1') <<
+    worker('#2') <<
     worker('#3')
 
   while workers.any?(&:alive?)
