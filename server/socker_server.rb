@@ -3,9 +3,9 @@ require 'socket'
 
 # The requests' queue
 queue = Ractor.new do
-    loop do
-        Ractor.yield(Ractor.recv, move: true)
-    end
+  loop do
+    Ractor.yield(Ractor.recv, move: true)
+  end
 end
 
 # Number of running workers
@@ -13,20 +13,20 @@ COUNT = 8
 
 # Worker ractors
 workers = COUNT.times.map do
-    Ractor.new(queue) do |queue|
-        loop do
-            session = queue.take
-            data = session.recv(1024)
-            puts data
-            session.print "Hello world!\n"
-            session.close
-        end
+  Ractor.new(queue) do |queue|
+    loop do
+      session = queue.take
+      value = (0..9).to_a.sample
+      sleep 2
+      session.print value
+      session.close
     end
+  end
 end
 
 # TCP server instance
-server = TCPServer.new(8000)
+server = TCPServer.new(9000)
 loop do
-    conn, _ = server.accept
-    queue.send(conn, move: true)
+  conn, _ = server.accept
+  queue.send(conn, move: true)
 end
