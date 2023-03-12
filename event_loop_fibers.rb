@@ -3,7 +3,7 @@ require './helpers'
 
 def worker(label)
   Fiber.new do
-    sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
+    sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, protocol = 0)
     sock.connect(Socket.sockaddr_in(9000, '127.0.0.1'))
     loop do
       data = sock.recv_nonblock(10, exception: false)
@@ -18,10 +18,10 @@ def worker(label)
 end
 
 def run_with_fibers
-  workers = []
-  workers << worker('#1')
-  workers << worker('#2')
-  workers << worker('#3')
+  workers = [] <<
+    worker('#1')
+    worker('#2')
+    worker('#3')
 
   while workers.any?(&:alive?)
     workers.each(&:resume)
