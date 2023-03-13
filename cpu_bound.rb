@@ -27,14 +27,10 @@ def run_with_processes
 end
 
 def run_with_ractors
-  ractors = 4.times.map do |slice|
+  ractors = (1..100).each_slice(25).map do |slice|
     Ractor.new do
       Ractor.recv.map { |x| compute(x) }
-    end
-  end
-
-  (1..100).each_slice(25).with_index do |slice, i|
-    ractors[i] << slice # alias for send
+    end.tap { |r| r << slice }
   end
 
   ractors.size.times do # wait for ractor termination
