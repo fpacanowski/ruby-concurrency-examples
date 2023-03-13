@@ -3,7 +3,7 @@ require 'digest'
 def compute()
   (25 * 50_000).times do
     var = Random.rand(1000)
-    result = Digest::SHA1.hexdigest(var.to_s)
+    result = Digest::SHA512.hexdigest(var.to_s)
   end
   print '.'
 end

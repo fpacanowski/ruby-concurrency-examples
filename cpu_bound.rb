@@ -3,7 +3,7 @@ require 'digest'
 def compute(input)
   result = input.to_s
   50_000.times do
-    result = Digest::SHA1.hexdigest(result)
+    result = Digest::SHA512.hexdigest(result) # digest is using C extensions
   end
   print '.'
 end
