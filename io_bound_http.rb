@@ -43,35 +43,28 @@ def run_with_async
   end
 end
 
-# does not work within ractor
-def fetch_random_async
-  # Async do |task|
-    internet = Async::HTTP::Internet.new
-    # task.async do
-      response = internet.get('http://127.0.0.1:4567/')
-      # puts "Got: #{response.body.read}"
-    # end
-  # ensure
-    # The internet is closed for business:
-    internet.close
-  # end
-end
-
 def run_with_ractors
+  Ractor.make_shareable(HTTPray::DEFAULT_HEADERS)
+
   ractors = 3.times.map do
     Ractor.new do
       # fetch_random # did not work
-      # fetch_random_async # did not work
 
-      # HTTPray non blocking GETs
+      # HTTPray non-blocking GETs
       HTTPray.request("GET", "http://127.0.0.1:4567/") do |socket|
-        puts "Got: #{socket.gets}"
+        res = socket.gets
+        loop do
+          break if res&.chomp&.match?(/^\d+$/)
+          res = socket.gets
+        end
+        puts("Got: #{res}")
+      ensure
+        socket.close
       end
     end
   end
-  ractors.each(&:take)
+  p ractors.each(&:take)
 end
-# DOES NOT WORK due to not sharable things
 
 require './helpers'
 
@@ -79,6 +72,6 @@ Benchmark.benchmark('', nil, FORMAT_WITH_SUBPROCESSES) do |x|
   x.report("Sequential \n") { run_sequential }
   x.report("Threads \n")  { run_with_threads }
   x.report("Processes \n")  { run_with_processes }
-  x.report("Async \n")  { run_with_async }
-  # x.report("Ractors \n")  { run_with_ractors }
+  x.report("Ractors \n")  { run_with_ractors }
+  x.report("Async \n")  { run_with_async } # breaks sometimes
 end

@@ -44,7 +44,7 @@ To test it out run http server, which returns random number after 2 seconds
 (jump into new terminal tab)
 
 now we will compare sending request to http server using solutions, which were used in previous chapter.
-Unfortunatelly ractors does not support making http requests inside them. So we added async gem to bundle.
+Unfortunatelly ractors does not support making http requests inside them with standard NET::HTTP. So we added httpray gem to send http non-blocking requests.
 
 `ruby io_bound_http.rb`
 
