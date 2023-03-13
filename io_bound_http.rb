@@ -2,7 +2,7 @@ require "net/http"
 
 def fetch_random
   response_body = Net::HTTP.get('127.0.0.1', '/', port = 4567)
-  # puts "Got: #{response_body}"
+  puts "Got: #{response_body}"
 end
 
 def run_sequential
@@ -29,7 +29,7 @@ def run_with_ractors
   end
   ractors.each(&:take)
 end
-# DOES NOT WORK
+# DOES NOT WORK due to not sharable things
 
 require './helpers'
 
