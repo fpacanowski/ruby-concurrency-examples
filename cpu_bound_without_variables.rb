@@ -8,7 +8,8 @@ def compute()
   print '.'
 end
 
-MULTIPLY_TASK_NUMBER = 4
+require 'etc'
+MULTIPLY_TASK_NUMBER = Etc.nprocessors / 2 # half of M1 processors are weaker :D
 
 def run_sequential
   MULTIPLY_TASK_NUMBER.times { |x| compute }
