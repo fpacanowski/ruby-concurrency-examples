@@ -16,7 +16,7 @@ workers = COUNT.times.map do
   Ractor.new(queue) do |queue|
     loop do
       session = queue.take
-      value = Random.rand(10)
+      value = Random.rand(100)
       sleep 2
       puts 'received request'
       session.print value
