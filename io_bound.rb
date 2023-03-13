@@ -13,9 +13,8 @@ def run_sequential
 end
 
 def run_with_threads
-  threads = []
-  3.times do
-    threads << Thread.new { fetch_random }
+  threads = 3.times.map do
+    Thread.new { fetch_random }
   end
   threads.each(&:join)
 end
@@ -27,10 +26,18 @@ def run_with_processes
   Process.waitall
 end
 
+def run_with_ractors
+  ractors = 3.times.map do
+    Ractor.new { fetch_random }
+  end
+  ractors.each(&:take)
+end
+
 require './helpers'
 
 Benchmark.benchmark('', nil, FORMAT_WITH_SUBPROCESSES) do |x|
   x.report("Sequential \n") { run_sequential }
   x.report("Threads \n")  { run_with_threads }
   x.report("Processes \n")  { run_with_processes }
+  x.report("Ractors \n")  { run_with_ractors }
 end

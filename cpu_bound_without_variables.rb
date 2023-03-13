@@ -15,9 +15,8 @@ def run_sequential
 end
 
 def run_with_threads
-  threads = []
-  MULTIPLY_TASK_NUMBER.times do
-    threads << Thread.new { compute }
+  threads = MULTIPLY_TASK_NUMBER.times.map do
+    Thread.new { compute }
   end
   threads.each(&:join)
 end
@@ -30,9 +29,10 @@ def run_with_processes
 end
 
 def run_with_ractors
-  MULTIPLY_TASK_NUMBER.times.map do
+  ractors = MULTIPLY_TASK_NUMBER.times.map do
     Ractor.new { compute }
-  end.each(&:take)
+  end
+  ractors.each(&:take)
 end
 
 # def ractor

@@ -13,9 +13,8 @@ def run_sequential
 end
 
 def run_with_threads
-  threads = []
-  (1..100).each_slice(25) do |slice|
-    threads << Thread.new { slice.map { |x| compute(x) } }
+  threads = (1..100).each_slice(25).map do |slice|
+    Thread.new { slice.map { |x| compute(x) } }
   end
   threads.each(&:join)
 end
@@ -28,11 +27,10 @@ def run_with_processes
 end
 
 def run_with_ractors_wrong
-  ractors = []
-  (1..100).each_slice(25) do |slice|
+  ractors = (1..100).each_slice(25).map do |slice|
     slice.dup.then do |tmp|
       Ractor.make_shareable(tmp)
-      ractors << Ractor.new(tmp) { |param| param.map { |x| compute(x) } }
+      Ractor.new(tmp) { |param| param.map { |x| compute(x) } }
     end
   end
   ractors.each(&:take)
