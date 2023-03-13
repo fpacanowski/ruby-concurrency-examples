@@ -16,10 +16,6 @@ start with installing required gems with `bundle install`
 
 `ruby cpu_bound.rb`
 
-to see ractors in action skip parameter passing in file:
-
-`ruby cpu_bound_without_variables.rb`
-
 ## I/O bound tasks with concurrency / paralelism
 
 ### TCP socket communication
