@@ -16,7 +16,7 @@ workers = COUNT.times.map do
   Ractor.new(queue) do |queue|
     loop do
       session = queue.take
-      value = (0..9).to_a.sample
+      value = Random.rand(10)
       sleep 2
       puts 'received request'
       session.print value
@@ -26,7 +26,9 @@ workers = COUNT.times.map do
 end
 
 # TCP server instance
-server = TCPServer.new(9000)
+server_port = 9000
+server = TCPServer.new(server_port)
+puts "Server listening on port #{server_port}"
 loop do
   conn, _ = server.accept
   queue.send(conn, move: true)
