@@ -58,9 +58,7 @@ def run_with_ractors
           res = socket.gets
         end
         puts("Got: #{res}")
-      ensure
-        socket.close
-      end
+      end # socket closed by library with ensure
     end
   end
   p ractors.each(&:take)
