@@ -11,7 +11,7 @@ class Worker
     # puts "Worker #{@label} state: #{@state.inspect}"
     case @state
     when :started
-      @sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, 0)
+      @sock = Socket.new(Socket::AF_INET, Socket::SOCK_STREAM, protocol = 0)
       @sock.connect(Socket.sockaddr_in(9000, '127.0.0.1'))
       @state = :waiting_for_data
     when :waiting_for_data
@@ -29,10 +29,10 @@ class Worker
 end
 
 def run_with_event_loop
-  workers = []
-  workers << Worker.new('#1')
-  workers << Worker.new('#2')
-  workers << Worker.new('#3')
+  workers = [] <<
+    Worker.new('#1') <<
+    Worker.new('#2') <<
+    Worker.new('#3')
 
   while workers.any?(&:in_progress?)
     workers.each(&:tick)
