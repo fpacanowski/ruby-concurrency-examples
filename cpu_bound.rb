@@ -1,10 +1,24 @@
 require 'digest'
 
 def compute(input)
+  # this is relying on C extension
+  # 50_000.times do
+  #   result = Digest::SHA512.hexdigest(result) # digest is using C extensions
+  # end
+
   result = input.to_s
-  50_000.times do
-    result = Digest::SHA512.hexdigest(result) # digest is using C extensions
+  1500.times do |i|
+    Math.sqrt(23467**2436) * i / 0.2
   end
+
+  # https://github.com/TheRusskiy/ruby3-http-server
+  # this is SLOWER with ractors
+  # 500.times do |i|
+  #   1000.downto(1) do |j|
+  #     Math.sqrt(j) * i / 0.2
+  #   end
+  # end
+
   print '.'
 end
 

@@ -1,4 +1,6 @@
 # from https://scoutapm.com/blog/ruby-ractor
+# https://kirshatrov.com/posts/ractor-web-server-part-two
+
 require 'socket'
 
 # The requests' queue
