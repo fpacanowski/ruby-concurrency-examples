@@ -16,6 +16,9 @@ start with installing required gems with `bundle install`
 
 `ruby cpu_bound.rb`
 
+to test goru instead of conflicting polyphony gem
+`GORU=1 ruby cpu_bound.rb`
+
 ## I/O bound tasks with concurrency / paralelism
 
 ### TCP socket communication
